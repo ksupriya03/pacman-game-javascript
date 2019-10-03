@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Pac-man</title>
+    <style>
+      /*  * {
+        outline: 1px dotted purple;
+      } */
+      .divclass {
+        line-height: 0px;
+        margin: -2px;
+        vertical-align: top;
+      }
+      .pacman {
+        width: 50px;
+        height: 50px;
+        background-image: url('pacman.png');
+        display: inline-block;
+      }
+      .wall {
+        width: 50px;
+        height: 50px;
+        background-image: url('wall.png');
+        display: inline-block;
+      }
+      .coin {
+        width: 50px;
+        height: 50px;
+        background-image: url('coin.png');
+        display: inline-block;
+      }
+      .ground {
+        width: 50px;
+        height: 50px;
+        background-image: url('ground.png');
+        display: inline-block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>PacMan Game</h1>
+    <div>Press Arrow Keys to Start Game</div>
+    <div class="divclass">
+      <div id="world"></div>
+      <h1 id="score"></h1>
+    </div>
+  </body>
+  <script>
+    //1=<div class="wall"></div>
+    //2= <div class="coin"></div>
+    //3=<div class="ground"></div>
+    //5= <div class="pacman"></div>
+    var map = [
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+      [1, 2, 1, 1, 2, 1, 2, 2, 1, 2, 1, 1, 1],
+      [1, 2, 2, 1, 2, 1, 2, 2, 1, 1, 1, 1, 1],
+      [1, 2, 2, 1, 1, 1, 5, 2, 1, 1, 1, 1, 1],
+      [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+      [1, 2, 1, 1, 2, 1, 2, 2, 1, 2, 1, 1, 1],
+      [1, 2, 2, 1, 2, 1, 2, 2, 1, 1, 1, 1, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    var pacman = {
+      x: 6,
+      y: 4,
+    };
+    var score = 0;
+    //console.log(document)
+    function drawWorld() {
+      document.getElementById('world').innerHTML = '';
+      for (var y = 0; y < map.length; y = y + 1) {
+        //console.log(map[y]);
+        for (var x = 0; x < map[y].length; x = x + 1) {
+          //console.log(map[y][x]);
+          if (map[y][x] === 1) {
+            document.getElementById('world').innerHTML +=
+              "<div class='wall'></div>";
+          } else if (map[y][x] === 2) {
+            document.getElementById('world').innerHTML +=
+              "<div class='coin'></div>";
+          } else if (map[y][x] === 5) {
+            document.getElementById('world').innerHTML +=
+              "<div class='pacman'></div>";
+          } else if (map[y][x] === 3) {
+            document.getElementById('world').innerHTML +=
+              "<div class='ground'></div>";
+          }
+        }
+        document.getElementById('world').innerHTML += '</br>';
+      }
+    }
+    //function to find final score.
+    function scorecard(score) {
+      console.log(score);
+      document.getElementById('score').innerHTML = 'Final score is  ' + score;
+    }
+    document.onkeydown = function(e) {
+      console.log(e.keyCode);
+      if (e.keyCode === 37) {
+        //left
+        if (map[pacman.y][pacman.x - 1] !== 1) {
+          console.log(map[pacman.y][pacman.x]);
+          if (map[pacman.y][pacman.x - 1] === 2) {
+            score = score + 10;
+          }
+          map[pacman.y][pacman.x] = 3;
+          pacman.x = pacman.x - 1; //make it blank as it moves up
+          map[pacman.y][pacman.x] = 5;
+          drawWorld();
+          scorecard(score);
+        }
+      } else if (e.keyCode === 38) {
+        //up
+        if (map[pacman.y - 1][pacman.x] !== 1) {
+          if (map[pacman.y - 1][pacman.x] === 2) {
+            score = score + 10;
+          }
+          console.log(map[pacman.y][pacman.x]);
+          map[pacman.y][pacman.x] = 3; //assign to ground
+          pacman.y = pacman.y - 1; //make it blank as it moves up
+          map[pacman.y][pacman.x] = 5; //assign packman vaue back
+          drawWorld();
+          scorecard(score);
+        }
+      }
+      if (e.keyCode === 39) {
+        //right
+        if (map[pacman.y][pacman.x + 1] !== 1) {
+          if (map[pacman.y][pacman.x + 1] === 2) {
+            score = score + 10;
+          }
+          console.log(map[pacman.y][pacman.x]);
+          map[pacman.y][pacman.x] = 3;
+          pacman.x = pacman.x + 1; //make it blank as it moves up
+          map[pacman.y][pacman.x] = 5; //assign packman value
+          drawWorld();
+          scorecard(score);
+        }
+      }
+      if (e.keyCode === 40) {
+        //down
+        if (map[pacman.y + 1][pacman.x] !== 1) {
+          if (map[pacman.y + 1][pacman.x] === 2) {
+            score = score + 10;
+          }
+          console.log(map[pacman.y][pacman.x]);
+          map[pacman.y][pacman.x] = 3;
+          pacman.y = pacman.y + 1; //make it blank as it moves up
+          map[pacman.y][pacman.x] = 5;
+          drawWorld();
+          scorecard(score);
+        }
+      }
+    };
+    drawWorld();
+  </script>
+</html>
